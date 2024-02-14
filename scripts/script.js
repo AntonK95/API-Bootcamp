@@ -12,7 +12,9 @@ window.addEventListener('DOMContentLoaded', () => {
     // uppgift6(); //Övning 2
     // uppgift7(); //Övning 3
     // uppgift8(); //Övning 3
-    
+    // uppgift9(); //Övning 4
+    // uppgift10(); //Övning 4
+    // uppgift11(); //Övning 4
 })
 
 
@@ -208,3 +210,65 @@ async function uppgift8() {
     }
 }
 
+async function uppgift9() {
+
+    try {
+        const response = await fetch('https://santosnr6.github.io/Data/attendees.json');
+
+        if(!response.ok) {
+            throw ('Ojsan något gick visst fel vid hämtnin av data.');
+        }
+
+        const visitorList = await response.json();
+
+        visitorList.map(visitor => {
+            console.log(visitor);
+        });
+
+    } catch (error) {
+        console.log('Error', error)
+    }
+
+}
+
+async function uppgift10() {
+    try {
+        const response = await fetch('https://santosnr6.github.io/Data/attendees.json');
+
+        if(!response.ok) {
+            throw ('Ojsan något gick visst fel vid hämtnin av data.');
+        }
+
+        const visitorList = await response.json();
+
+        visitorList.sort(visitor => {
+            if(visitor.attending === true) {
+                console.log(visitor);
+            }
+        });
+
+    } catch (error) {
+        console.log('Error', error)
+    }
+}
+
+async function uppgift11() {
+    try {
+        const response = await fetch('https://santosnr6.github.io/Data/attendees.json');
+
+        if(!response.ok) {
+            throw ('Ojsan något gick visst fel vid hämtnin av data.');
+        }
+
+        const visitorList = await response.json();
+
+        visitorList.filter(visitor => {
+            if(visitor.attending === true && visitor.allergies !== '' && visitor.allergies.length > 0) {
+                console.log(visitor);
+            }
+        });
+
+    } catch (error) {
+        console.log('Error', error)
+    }
+}
