@@ -322,11 +322,12 @@ async function uppgift13() {
 }
  function filterPokemon(pokemonList, pokemonSearch) {
     const filteredPokemons = pokemonList.filter(pokemon => 
-        pokemon.name.toLocaleLowerCase().includes(pokemonSearch));
+        pokemon.name.toLowerCase().includes(pokemonSearch));
         console.log(filteredPokemons);
 }
 
 async function uppgift14() {
+    let matchingPokemon;
 
     try {
         const response = await fetch('https://santosnr6.github.io/Data/pokemons.json');
@@ -336,6 +337,7 @@ async function uppgift14() {
             throw ('Hoppsan! Något är galet, kan inte hämta data.');
         }
         const pokemonList = await response.json();
+        console.log(pokemonList);
         
         const searchField = document.createElement('input');
         searchField.placeholder = 'Search pokemon by name';
@@ -346,17 +348,25 @@ async function uppgift14() {
 
         searchField.addEventListener('input', async () => {
             const pokemonSearch = searchField.value.toLocaleLowerCase();
-            const filteredPokemons = filterPokemon(pokemonList, pokemonSearch);
+            console.log('Sökord:', pokemonSearch);
+            matchingPokemon = findMatchingPokemon(pokemonList, pokemonSearch);
 
             pokemonContainer.innerHTML = '';
-            console.log('Matchar sökningen', filteredPokemons.name);
 
-            for(const pokemon of filteredPokemons) {
-                const pokemonDetails = await fetchPokemonDetails(pokemon.url)
-                //console.log('Pokemon Details', pokemonDetails);
-                const pokemonElement = document.createElement('div');
-                pokemonElement.textContent = pokemonDetails.name;
-                pokemonContainer.appendChild(pokemonElement);
+            if(matchingPokemon.length > 0) {
+                matchingPokemon.forEach(async (pokemon) => {
+                    const pokemonDetails = await fetchPokemonDetails(pokemon); // Skicka hela objektet och inte bra namnet!!!
+                    console.log(pokemon);
+                    console.log(matchingPokemon);
+                    console.log(pokemonDetails);
+                    const pokemonElement = document.createElement('div');
+                    pokemonElement.textContent = `Name ${pokemonDetails.name}, 
+                                                Height ${pokemonDetails.height }, 
+                                                Weight ${pokemonDetails.weight }`;
+                    pokemonContainer.appendChild(pokemonElement);
+                });
+            } else {
+                console.log('No matching pokemon found.');
             }
         });
         
@@ -365,14 +375,15 @@ async function uppgift14() {
     }
 }
 
- function filterPokemon(pokemonList, pokemonSearch) {
+
+function findMatchingPokemon(pokemonList, pokemonSearch) {
     return pokemonList.filter(pokemon =>
-        pokemon.name.toLocaleLowerCase().includes(pokemonSearch));
+    pokemon.name.toLowerCase().includes(pokemonSearch));
 }
 
-async function fetchPokemonDetails(url) {
+async function fetchPokemonDetails(pokemon) {
     try {
-        const response = await fetch(url);
+        const response = await fetch(pokemon.url);
 
         if(!response.ok) {
             throw ('Skit också! Det funkar ju inte att hämta data!');
