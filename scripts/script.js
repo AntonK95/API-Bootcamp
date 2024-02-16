@@ -312,7 +312,7 @@ async function uppgift13() {
         document.body.appendChild(searchField);
 
         searchField.addEventListener('input', () => {
-            const pokemonSearch = searchField.value.toLocaleLowerCase();
+            const pokemonSearch = searchField.value.toLowerCase();
             filterPokemon(pokemonList, pokemonSearch);
         });
         
@@ -347,7 +347,7 @@ async function uppgift14() {
         document.body.appendChild(pokemonContainer);
 
         searchField.addEventListener('input', async () => {
-            const pokemonSearch = searchField.value.toLocaleLowerCase();
+            const pokemonSearch = searchField.value.toLowerCase();
             console.log('Sökord:', pokemonSearch);
             matchingPokemon = findMatchingPokemon(pokemonList, pokemonSearch);
 
